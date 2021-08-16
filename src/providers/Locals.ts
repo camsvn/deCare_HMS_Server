@@ -25,6 +25,13 @@ class Locals {
 
         const apiPrefix = process.env.API_PREFIX || 'api';
 
+        const databaseHost = process.env.SQL_SERVER;
+        const databaseName = process.env.SQL_DATABASE;
+        const databaseInstance = process.env.SQL_SERVER_INSTANCE;
+        const databaseUser = process.env.SQL_USER;
+        const databasePassword = process.env.SQL_PASSWORD;
+
+
 
         return {
             url,
@@ -37,7 +44,14 @@ class Locals {
             description,
             logDays,
             isCORSEnabled,
-            apiPrefix
+            apiPrefix,
+            database : {
+                host: databaseHost,
+                name: databaseName,
+                instanceName: databaseInstance,
+                user: databaseUser,
+                password: databasePassword
+            }
         }
     }
 
