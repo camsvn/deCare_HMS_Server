@@ -1,6 +1,6 @@
 import { ErrorRequestHandler, Application, Request, Response } from 'express';
 
-import Log from './Log';
+import Log from '../middlewares/Log';
 import Locals from '../providers/Locals';
 
 class Handler {

@@ -2,7 +2,7 @@ import express from 'express';
 
 import Locals from './Locals';
 import Routes from './Routes';
-import ExceptionHandler from '../middlewares/ExceptionHandler';
+import ExceptionHandler from '../exception/ExceptionHandler';
 import Kernal from '../middlewares/Kernal';
 
 
@@ -35,7 +35,7 @@ class Express {
         this.express = ExceptionHandler.notFoundHandler(this.express);
 
         this.express.listen(port, () => {
-            return console.log('\x1b[33m%s\x1b[0m', `Server :: Running @ 'http://localhost:${port}'`);
+            return console.log('\x1b[32m%s\x1b[0m', `Server :: Running @ 'http://localhost:${port}'`);
         })
     }
 
