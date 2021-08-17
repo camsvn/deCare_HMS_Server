@@ -21,8 +21,6 @@ class Locals {
 
         const logDays = process.env.LOG_DAYS || 10;
 
-        const isCORSEnabled =  process.env.CORS_ENABLED || true;
-
         const apiPrefix = process.env.API_PREFIX || 'api';
 
         const databaseHost = process.env.SQL_SERVER;
@@ -43,7 +41,6 @@ class Locals {
             company,
             description,
             logDays,
-            isCORSEnabled,
             apiPrefix,
             database : {
                 host: databaseHost,

@@ -18,7 +18,15 @@ class Http {
          * https://expressjs.com/en/advanced/best-practice-security.html
          * Security overheads
          */
-        _express.use(helmet());
+        _express.use(helmet({
+            contentSecurityPolicy: false,
+        }));
+        _express.use(helmet.contentSecurityPolicy({
+            useDefaults: true,
+            directives: {
+                "script-src": ["'self'", "'sha256-smeKlzoBksVYJbpIwiP/yNzhQLzmXzVRkIh1Wvvydz4='", 'cdnjs.cloudflare.com']
+            },
+        }));
 
         return _express;
     }
