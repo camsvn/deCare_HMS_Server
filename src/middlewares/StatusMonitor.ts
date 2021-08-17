@@ -41,12 +41,6 @@ class StatusMonitor {
 				{
 					protocol: 'http',
 					host: 'localhost',
-					path: '/',
-					port: `${port}`
-				},
-				{
-					protocol: 'http',
-					host: 'localhost',
 					path: `/${api}`,
 					port: `${port}`
 				}
