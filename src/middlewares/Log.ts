@@ -4,6 +4,10 @@
 
  import * as fs from 'fs';
  import * as path from 'path';
+ import cron from 'node-cron';
+
+ import Locals from '../providers/Locals';
+
  
  class Log {
      public baseDir: string;
@@ -13,13 +17,16 @@
      public today: Date = new Date();
  
      constructor() {
-         let _dateString = `${this.today.getFullYear()}-${(this.today.getMonth() + 1)}-${this.today.getDate()}`;
-         let _timeString = `${this.today.getHours()}:${this.today.getMinutes()}:${this.today.getSeconds()}`;
+        let _dateString = `${this.today.getFullYear()}-${(this.today.getMonth() + 1)}-${this.today.getDate()}`;
+        let _timeString = `${this.today.getHours()}:${this.today.getMinutes()}:${this.today.getSeconds()}`;
  
-         this.baseDir = path.join(__dirname, '../../.logs/');
+        this.baseDir = path.join(__dirname, '../../.logs/');
  
-         this.fileName = `${_dateString}.log`;
-         this.linePrefix = `[${_dateString} ${_timeString}]`;
+        this.fileName = `${_dateString}.log`;
+        this.linePrefix = `[${_dateString} ${_timeString}]`;
+        this.custom('INIT', 'Server :: Starting...');
+        this.clean();
+        this.mountCRONS();
      }
  
      // Adds INFO prefix string to the log string
@@ -56,7 +63,7 @@
          fs.open(`${_that.baseDir}${_that.fileName}`, 'a', (_err, _fileDescriptor) => {
              if (!_err && _fileDescriptor) {
                  // Append to file and close it
-                 fs.appendFile(_fileDescriptor, `${_that.linePrefix} [${_kind}] ${_string}\n`, (_err) => {
+                 fs.appendFile(_fileDescriptor, `${_that.getTimeStamp()} [${_kind}] ${_string}\n`, (_err) => {
                      if (! _err) {
                          fs.close(_fileDescriptor, (_err) => {
                              if (! _err) {
@@ -81,8 +88,47 @@
       * Note: 'X' is defined in .env file
       */
      public clean (): void {
-         //
+        let today = new Date();
+        let oldDate = this.subtractDays(Locals.config().logDays, today);
+        let _dateString = `${oldDate.getFullYear()}-${(oldDate.getMonth() + 1)}-${oldDate.getDate()}`;
+        let matureFileName = `${_dateString}.log`;
+        fs.unlink(`${this.baseDir}\\${matureFileName}`, (_err) => {
+            if (! _err) {
+                this.info(`Log :: File '${matureFileName}' deleted`);
+            }
+        });
      }
+     
+     private mountCRONS(): void {
+         cron.schedule('0 0 * * *', () => {
+             this.info('Log :: CRON process started');
+             this.clean();
+             this.createNewFile();
+         })
+     }
+
+     private getTimeStamp (): string {
+        let today = new Date();
+        let _dateString = `${today.getFullYear()}-${(today.getMonth() + 1)}-${today.getDate()}`;
+        let _timeString = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+        return `[${_dateString} ${_timeString}]`;
+    }
+
+     private createNewFile (): void {
+        let today = new Date();
+        let _dateString = `${today.getHours()}-${today.getMinutes()}-${today.getSeconds()}`;        
+        
+        this.info(`Log :: Creating new File ${_dateString}.log`);
+        this.fileName = `${_dateString}.log`;
+        this.info(`Log :: ${_dateString}.log created`);
+
+     }
+
+     private subtractDays(days: number, date: Date) {
+        let newDate = new Date(date.getTime());
+        newDate.setDate(date.getDate() - days);
+        return newDate;
+    };
  }
  
  export default new Log;
