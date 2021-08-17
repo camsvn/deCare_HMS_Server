@@ -117,7 +117,7 @@
 
      private createNewFile (): void {
         let today = new Date();
-        let _dateString = `${today.getHours()}-${today.getMinutes()}-${today.getSeconds()}`;        
+        let _dateString = `${today.getFullYear()}-${(today.getMonth() + 1)}-${today.getDate()}`;        
         
         this.info(`Log :: Creating new File ${_dateString}.log`);
         this.fileName = `${_dateString}.log`;
