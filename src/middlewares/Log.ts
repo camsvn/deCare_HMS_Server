@@ -42,7 +42,8 @@
      // Adds ERROR prefix string to the log string
      public error (_string: string): void {
          // Line break and show the first line
-         console.log('\x1b[31m%s\x1b[0m', '[ERROR] :: ' + _string.split(/r?\n/)[0]);
+         if (_string.indexOf('Path') != 0)
+            console.log('\x1b[31m%s\x1b[0m', '[ERROR] :: ' + _string.split(/r?\n/)[0]);
  
          this.addLog('ERROR', _string);
      }
