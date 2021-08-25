@@ -24,6 +24,10 @@
  
         this.fileName = `${_dateString}.log`;
         this.linePrefix = `[${_dateString} ${_timeString}]`;
+        if (!fs.existsSync(this.baseDir)) {
+            fs.mkdirSync(this.baseDir);
+            this.custom('CREATE', `Directory :: '.logs' Creating...`);
+        }
         this.custom('INIT', 'Server :: Starting...');
         this.clean();
         this.mountCRONS();
