@@ -93,14 +93,27 @@
       * Note: 'X' is defined in .env file
       */
      public clean (): void {
-        let today = new Date();
-        let oldDate = this.subtractDays(Locals.config().logDays, today);
-        let _dateString = `${oldDate.getFullYear()}-${(oldDate.getMonth() + 1)}-${oldDate.getDate()}`;
-        let matureFileName = `${_dateString}.log`;
-        fs.unlink(`${this.baseDir}\\${matureFileName}`, (_err) => {
-            if (! _err) {
-                this.info(`Log :: File '${matureFileName}' deleted`);
-            }
+        const _that = this;
+        
+        fs.readdir(_that.baseDir, function(err, files) {
+            files.forEach(function(file, index) {
+              fs.stat(path.join(_that.baseDir, file), function(err, stat) {
+                var endTime, now;
+                if (err) {
+                  return console.error(err);
+                }
+                now = new Date().getTime();
+                endTime = new Date(stat.ctime).getTime() + (86400000 * Locals.config().logDays); // 1000ms * 60s * 60m * 24hr = 86400000 
+                if (now > endTime) {
+                    fs.rm(path.join(_that.baseDir, file), function(err) {
+                    if (err) {
+                      return console.error(err);
+                    }
+                    _that.info(`Log :: File '${file}' deleted`);
+                  });
+                }
+              });
+            });
         });
      }
      
