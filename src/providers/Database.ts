@@ -9,25 +9,8 @@ export class Database {
 	// Initialize your database pool
 	public static init (): any {
 		const { database } = Locals.config();
-		// const dsn = Locals.config().mongooseUrl;
-		// const options = { useNewUrlParser: true, useUnifiedTopology: true };
-
-		// (<any>mongoose).Promise = bluebird;
-
-		// mongoose.set('useCreateIndex', true);
-
-		// mongoose.connect(dsn, options, (error: MongoError) => {
-		// 	// handle the error case
-		// 	if (error) {
-		// 		Log.info('Failed to connect to the Mongo server!!');
-		// 		console.log(error);
-		// 		throw error;
-		// 	} else {
-		// 		Log.info('connected to mongo server at: ' + dsn);
-		// 	}
-		// });
-        // this.sequelize = new Sequelize('sqlite::memory:');
-		database.name , database.user, database.password, {
+		
+        this.sequelize = new Sequelize(database.name , database.user, database.password, {
 			dialect: "mssql",
 			host: database.host,
 			// logging: (...msg) => console.log(`${msg[1].type} Operation`),
@@ -47,8 +30,12 @@ export class Database {
 			  max: 5,
 			  idle: 3000,
 			},
-		  }
+		  }		
+		);
 
+		this.sequelize.authenticate()
+			.then(() => {Log.info('Database :: Connection Succesfull @ Master')})
+			.catch((err: Error) => Log.error(`Database :: ${err.message} \n${err.stack}`))
 	}
 }
 
