@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as dotenv from 'dotenv';
 
 import Express from './Express';
-import { Database } from './Database';
+import Database from './Database';
 
 import Log from '../middlewares/Log';
 
