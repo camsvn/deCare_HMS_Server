@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as dotenv from 'dotenv';
 
 class Locals {
-    public static config(): any {
+    public static config() {
         dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 		const url = process.env.APP_URL || `http://localhost:${process.env.PORT}`;
@@ -19,15 +19,15 @@ class Locals {
 		const company = process.env.COMPANY_NAME || 'DeCare Software Solutions';
 		const description = process.env.APP_DESCRIPTION || 'Here goes the app description';
 
-        const logDays = process.env.LOG_DAYS || 10;
+        const logDays = isNaN(Number(process.env.LOG_DAYS)) ? 10 : Number(process.env.LOG_DAYS);
 
         const apiPrefix = process.env.API_PREFIX || 'api';
 
-        const databaseHost = process.env.SQL_SERVER;
-        const databaseName = process.env.SQL_DATABASE;
-        const databaseInstance = process.env.SQL_SERVER_INSTANCE;
-        const databaseUser = process.env.SQL_USER;
-        const databasePassword = process.env.SQL_PASSWORD;
+        const databaseHost = process.env.SQL_SERVER || '';
+        const databaseName = process.env.SQL_DATABASE || '';
+        const databaseInstance = process.env.SQL_SERVER_INSTANCE || '';
+        const databaseUser = process.env.SQL_USER || '';
+        const databasePassword = process.env.SQL_PASSWORD || '';
 
 
 
