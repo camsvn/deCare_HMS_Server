@@ -1,13 +1,12 @@
 import { Router, Request, Response } from "express";
 
-import {successResponse} from '../common/JSend'
-import {loginController} from '../controllers/auth'
+import authRouter from '../controllers/auth'
+import indexRouter from '../controllers'
 
-export const apiRouter = Router();
-export const authRouter = Router();
+const router = Router();
 
-apiRouter.get('/', (req: Request, res: Response) => {
-    res.json(successResponse('Route /api success'))
-})
+router.use('/', indexRouter)
 
-authRouter.post('/login', loginController)
+router.use('/login', authRouter);
+
+export default router; 

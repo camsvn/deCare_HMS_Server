@@ -1,9 +1,11 @@
 import { Router, Request, Response, NextFunction } from "express";
 import jwt from 'jsonwebtoken';
 import Locals from '../providers/Locals';
-import {failResponse} from '../common/JSend'
+import {failResponse} from '../helpers/JSend';
 
-const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+const router = Router();
+
+export default router.use((req: Request, res: Response, next: NextFunction) => {
     const token = req.body.token || req.query.token || req.headers['x-access-token'];
 
     if(!token) {
@@ -20,6 +22,4 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
         .json(failResponse("Invalid Token"))
     }
     return next();
-}
-
-export {verifyToken};
+})
