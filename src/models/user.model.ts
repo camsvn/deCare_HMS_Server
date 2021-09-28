@@ -1,17 +1,6 @@
 // import sequelize from '../providers/Database';
 import {DataTypes, Model, Sequelize} from 'sequelize';
 
-export interface IUserInstance extends Model {
-    ID: number;
-    Username: string;
-    Password: string;
-    ClientID: number;
-    FinancialYearID: number;
-    ParentUserID: number;
-    CompanyID: number;
-    ReportDays: number;
-}
-
 export const User = (sequelize: Sequelize) => (sequelize.define('user', {
     ID: {
         type: DataTypes.INTEGER,
