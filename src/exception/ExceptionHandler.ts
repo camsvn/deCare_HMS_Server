@@ -1,5 +1,5 @@
 import { ErrorRequestHandler, Application, Request, Response } from 'express';
-import { errorResponse } from '../common/JSend';
+import { errorResponse } from '../helpers/JSend';
 
 import Log from '../middlewares/Log';
 import Locals from '../providers/Locals';
