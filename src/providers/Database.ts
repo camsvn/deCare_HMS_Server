@@ -41,6 +41,9 @@ class Database {
 			define: {
 			  freezeTableName: true,
 			},
+			query: {
+				raw: true,
+			},
 			dialectOptions: {
 			  options: {
 				instanceName: database.instanceName,

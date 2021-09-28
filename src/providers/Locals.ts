@@ -7,7 +7,7 @@ class Locals {
         dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 		const url = process.env.APP_URL || `http://localhost:${process.env.PORT}`;
-		const port = process.env.PORT || 4040;
+		const port = process.env.PORT || '4040';
 		const appSecret = process.env.APP_SECRET || 'This is your responsibility!';
 		// const mongooseUrl = process.env.MONGOOSE_URL;
 		const maxUploadLimit = process.env.APP_MAX_UPLOAD_LIMIT || '50mb';
@@ -29,7 +29,7 @@ class Locals {
         const databaseUser = process.env.SQL_USER || '';
         const databasePassword = process.env.SQL_PASSWORD || '';
 
-
+        const jwtExpiresIn = process.env.JWT_EXPIRES_IN || 3;
 
         return {
             url,
@@ -48,7 +48,8 @@ class Locals {
                 instanceName: databaseInstance,
                 user: databaseUser,
                 password: databasePassword
-            }
+            },
+            jwtExpiresIn
         }
     }
 
