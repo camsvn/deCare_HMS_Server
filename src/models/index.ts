@@ -1,6 +1,6 @@
 import { Model, ModelCtor } from 'sequelize'
-import { User, IUserInstance } from './user.model';
-import { TomogramType, ITomogramInstance } from './tomogramType.model';
+import { User, IUserInstance } from './user/user.model';
+import { TomogramType, ITomogramInstance } from './main/tomogramType.model';
 import { DatabaseTables } from '../helpers/constants'
 
 export {ITomogramInstance, IUserInstance}
