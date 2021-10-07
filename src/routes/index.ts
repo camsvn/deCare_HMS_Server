@@ -5,8 +5,9 @@ import indexRouter from '../controllers'
 
 const router = Router();
 
-router.use('/', indexRouter)
-
 router.use('/login', authRouter);
+
+router.use('/', indexRouter);
+
 
 export default router; 

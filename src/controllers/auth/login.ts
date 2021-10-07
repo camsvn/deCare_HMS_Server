@@ -6,7 +6,7 @@ import Log from '../../middlewares/Log';
 import {errorResponse,failResponse,successResponse} from '../../helpers/JSend'
 
 import {IUserInstance} from '../../models'
-import {models} from '../../providers/Database'
+import {modelsCollection} from '../../providers/Database'
 
 export const loginController = async (req: Request, res: Response) => {
     try {
@@ -15,7 +15,7 @@ export const loginController = async (req: Request, res: Response) => {
         if(!(username && password)) {
             return res.status(400).send(failResponse("All inputs are required"));
         }
-        const user: IUserInstance = await models.User?.findOne({
+        const user: IUserInstance = await modelsCollection.user.UserModel?.findOne({
             attributes: ['id','username', 'password'],
             where: {Username: username }
         });
