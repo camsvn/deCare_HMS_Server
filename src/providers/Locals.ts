@@ -1,7 +1,7 @@
 import { Application } from 'express';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
-
+import {DatabaseTables} from '../helpers/constants'
 class Locals {
     public static config() {
         dotenv.config({ path: path.join(__dirname, '../../.env') });
@@ -24,7 +24,10 @@ class Locals {
         const apiPrefix = process.env.API_PREFIX || 'api';
 
         const databaseHost = process.env.SQL_SERVER || '';
-        const databaseName = process.env.SQL_DATABASE || '';
+        const databaseNames: Record<string,string> = {
+            [DatabaseTables.DB_USER]: process.env.SQL_DATABASE || '',
+            [DatabaseTables.DB_MAIN]: process.env.MAIN_DATABASE || ''
+        };
         const databaseInstance = process.env.SQL_SERVER_INSTANCE || '';
         const databaseUser = process.env.SQL_USER || '';
         const databasePassword = process.env.SQL_PASSWORD || '';
@@ -44,9 +47,9 @@ class Locals {
             apiPrefix,
             database : {
                 host: databaseHost,
-                name: databaseName,
+                names: databaseNames,
                 instanceName: databaseInstance,
-                user: databaseUser,
+                username: databaseUser,
                 password: databasePassword
             },
             jwtExpiresIn

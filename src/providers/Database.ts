@@ -1,13 +1,12 @@
 import { Sequelize } from 'sequelize';
-import { Model, ModelCtor } from 'sequelize/types';
 
 import Locals from './Locals';
 import Log from '../middlewares/Log';
-import modelsDefinition, {IModels} from '../models'
+import {IModelCollection, modelCollection} from '../models';
 
 class Database {
-    public static sequelize : Sequelize;
-    public static models : {[key: string]: typeof Model} = {};
+    public static connections : Map<string, Sequelize> = new Map();
+    public static modelsCollection : any = {};
 
 	constructor () {
         this.configure();
@@ -15,27 +14,25 @@ class Database {
     }
 
 	private loadModals(): void {
-		const modelNames = Object.keys(modelsDefinition);
-
-		Log.info('Database :: Loading Database Models...')
-		// console.log('Modals', modelsDefinition);		
-		// console.log('Before: SequelizeModal', Database.sequelize.models);
-		Object.values(modelsDefinition).map((model, index) => {
-			const modelName = modelNames[index];
-			Database.models[modelName] = model(Database.sequelize);
-			Log.info(`Database :: ${modelName}Modal added`);
-			// console.log(Database.models.User === Database.sequelize.models.user)
+		const databaseNames = Object.keys(modelCollection);
+		Log.info('Database :: Loading Database Models...');
+		databaseNames.map((dbName) => {
+			const modelDefinitions = modelCollection[dbName];
+			const modelNames = Object.keys(modelDefinitions);
+			let models: any = {}
+			Object.values(modelDefinitions).map((model,index) => {
+				const modelName = modelNames[index];
+				models[modelName] = model(Database.connections.get(dbName));
+				Log.info(`Database :: ${modelName} added`);
+			})
+			Database.modelsCollection[dbName] = models;
 		})
-		// console.log('After: SequelizeModal', Database.sequelize.models);
 	}
 
-	// Configure database pool
-	private configure (): void {
-		const { database } = Locals.config();
-		
-        Database.sequelize = new Sequelize(database.name , database.user, database.password, {
+	private getConnection(dbName: string, username: string, password: string, host:string, instanceName: string): Sequelize {
+		return new Sequelize(dbName , username, password, {
 			dialect: "mssql",
-			host: database.host,
+			host: host,
 			// logging: (...msg) => console.log(`${msg[1].type} Operation`),
 			logging: false,
 			define: {
@@ -46,7 +43,7 @@ class Database {
 			},
 			dialectOptions: {
 			  options: {
-				instanceName: database.instanceName,
+				instanceName: instanceName,
 				encrypt: false, //false for server >v12
 				trustServerCertificate: true,
 				requestTimeout: 60000,
@@ -57,16 +54,30 @@ class Database {
 			  idle: 3000,
 			},
 		  }		
-		);
+		) 
+	}
+
+	// Configure database pool
+	private configure (): void {
+		const { names, username, password, host, instanceName } = Locals.config().database;
+
+		Object.keys(names).map((dbName) => {
+			if(dbName != '') {
+				const sequelize = this.getConnection(names[dbName], username, password, host, instanceName);
+				Database.connections.set(dbName, sequelize);
+			}
+		});
 	}
 
 	public init(): void {
-		Database.sequelize.authenticate()
-			.then(() => {Log.info('Database :: Connection Succesfull @ Master')})
-			.catch((err: Error) => Log.error(`Database :: ${err.message} \n${err.stack}`));
+		Database.connections.forEach((connection, dbName) => {
+			connection.authenticate()
+				.then(() => {Log.info(`Database :: '${dbName}' Connection Succesfull @ Master`)})
+				.catch((err: Error) => Log.error(`Database :: ${err.message} \n${err.stack}`));
+		});
 	}
 }
 
 export default new Database();
-export const connection = Database.sequelize
-export const models: IModels = Database.models
+export const modelsCollection: IModelCollection = Database.modelsCollection;
+export const connections = Database.connections;
