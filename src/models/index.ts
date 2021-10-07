@@ -1,23 +1,28 @@
 import { Model, ModelCtor } from 'sequelize'
-import {User} from './user.model';
+import { User, IUserInstance } from './user.model';
+import { TomogramType, ITomogramInstance } from './tomogramType.model';
+import { DatabaseTables } from '../helpers/constants'
 
-export interface IUserInstance extends Model {
-    id: number;
-    username: string;
-    password: string;
-    clientId: number;
-    financialYearId: number;
-    parentUserId: number;
-    companyId: number;
-    reportDays: number;
+export {ITomogramInstance, IUserInstance}
+
+type UserModelCollection = {
+    'UserModel'?: ModelCtor<Model>    
 }
 
-interface IModel {
-    [key: string]: Function
+type MainModelCollection = {
+    'TomogramTypeModel'?: ModelCtor<Model>    
 }
 
-export type IModels = {
-    'User'?: ModelCtor<Model>
+export type IModelCollection = {
+    'user' : UserModelCollection,
+    'main' : MainModelCollection
 }
 
-export default {User}
+export const modelCollection = {
+    [DatabaseTables.DB_USER]: {
+        UserModel: User
+    },
+    [DatabaseTables.DB_MAIN]: {
+        TomogramTypeModel: TomogramType
+    }
+}

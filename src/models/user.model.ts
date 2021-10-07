@@ -1,5 +1,15 @@
-// import sequelize from '../providers/Database';
 import {DataTypes, Model, Sequelize} from 'sequelize';
+
+export interface IUserInstance extends Model {
+    id: number;
+    username: string;
+    password: string;
+    clientId: number;
+    financialYearId: number;
+    parentUserId: number;
+    companyId: number;
+    reportDays: number;
+}
 
 export const User = (sequelize: Sequelize) => (sequelize.define('user', {
     ID: {
@@ -39,57 +49,3 @@ export const User = (sequelize: Sequelize) => (sequelize.define('user', {
     tableName: 'User',
     timestamps: false
 }));
-
-// class User extends Model {
-//     public ID!: number;
-//     public Username!: string;
-//     public Password!: string;
-//     public ClientID!: number;
-//     public FinancialYearID!: number;
-//     public ParentUserID!: number;
-//     public CompanyID!: number;
-//     public ReportDays!: number;
-// } 
-
-// User.init({
-//     ID: {
-//         type: Sequelize.INTEGER,
-//         primaryKey: true,
-//         allowNull: false
-//     },
-//     Username: {
-//         type: Sequelize.STRING,
-//         allowNull: false
-//     },
-//     Password: {
-//         type: Sequelize.STRING,
-//         allowNull: false
-//     },
-//     ClientID: {
-//         type: Sequelize.INTEGER,
-//         allowNull: false
-//     },
-//     FinancialYearID: {
-//         type: Sequelize.INTEGER,
-//         allowNull: false
-//     },
-//     ParentUserID: {
-//         type: Sequelize.INTEGER,
-//         allowNull: true
-//     },
-//     CompanyID: {
-//         type: Sequelize.INTEGER,
-//         allowNull: false
-//     },
-//     ReportDays: {
-//         type: Sequelize.INTEGER,
-//         allowNull: true
-//     }
-// },{
-//     sequelize,
-//     tableName: 'User'
-// });
-
-// export {User};
-
-
