@@ -12,7 +12,7 @@ router.get('/', (req: Request, res: Response) => {
     res.json(successResponse('Route /api success'))
 });
 
-router.get('/test', async (req: Request, res: Response) => {
+router.get('/test', async (req: Request, res) => {
     try {
         const tomo: ITomogramInstance = await modelsCollection.main.TomogramTypeModel?.findAll();
         const user: IUserInstance = await modelsCollection.user.UserModel?.findAll();
