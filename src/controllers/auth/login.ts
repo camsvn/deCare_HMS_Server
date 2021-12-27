@@ -6,7 +6,7 @@ import Log from '../../middlewares/Log';
 import {errorResponse,failResponse,successResponse} from '../../helpers/JSend'
 
 import {IUserInstance} from '../../models'
-import {modelsCollection} from '../../providers/Database'
+import {userDB} from '../../providers/Database'
 
 export const loginController = async (req: Request, res: Response) => {
     try {
@@ -15,7 +15,7 @@ export const loginController = async (req: Request, res: Response) => {
         if(!(username && password)) {
             return res.status(400).send(failResponse("All inputs are required"));
         }
-        const user: IUserInstance = await modelsCollection.user.UserModel?.findOne({
+        const user: IUserInstance = await userDB.UserModel?.findOne({
             attributes: ['id','username', 'password'],
             where: {Username: username }
         });
@@ -40,4 +40,8 @@ export const loginController = async (req: Request, res: Response) => {
         res.status(500).json(errorResponse("Internal Server Error", e.message));
     }
     
+}
+
+export const getloginController = async (req: Request, res: Response) => {
+    res.json(successResponse('Route /auth/login success'));
 }
