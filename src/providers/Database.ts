@@ -80,4 +80,6 @@ class Database {
 
 export default new Database();
 export const modelsCollection: IModelCollection = Database.modelsCollection;
+export const mainDB = modelsCollection.main;
+export const userDB = modelsCollection.user;
 export const connections = Database.connections;
