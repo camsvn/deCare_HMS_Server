@@ -14,24 +14,22 @@ const storage = multer.diskStorage({
 
 const fileFilter = (req: any,file: any,cb: any) => {
   if (file.mimetype === "image/jpg"  || 
-     file.mimetype ==="image/jpeg"  || 
-     file.mimetype ===  "image/png") {   
+     file.mimetype ==="image/jpeg") {   
     cb(null, true);
  } else {
-    cb(new FileTypeException("Image uploaded is not of type jpg/jpeg or png"),false);
+    cb(new FileTypeException("Image uploaded is not of type jpg/jpeg"),false);
   }
 }
 
-const upload = multer({storage: storage, fileFilter : fileFilter}).array('images', 2);
+const upload = multer({storage: storage, fileFilter : fileFilter}).array('images', 4);
 // var upload = multer({ dest: 'uploads/' }); //setting the default folder for multer
-
 export function uploadFile(req: Request, res: Response, next: NextFunction) {
-    upload(req, res, function (err) {
-      if (err instanceof multer.MulterError || err instanceof FileTypeException) {
-          return res.status(500).json({code: err.code, name: err.name, message: err.message})
-      } else if (err) {
-        return res.status(500).json({name: err.name, message: err.message})
-      }
-      next()
-    })
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError || err instanceof FileTypeException) {
+        return res.status(500).json({code: err.code, name: err.name, message: err.message})
+    } else if (err) {
+      return res.status(500).json({name: err.name, message: err.message})
+    }
+    next()
+  })
 }
