@@ -1,16 +1,20 @@
 import { Model, ModelCtor } from 'sequelize'
-import { User, IUserInstance } from './user/user.model';
-import { TomogramType, ITomogramInstance } from './main/tomogramType.model';
+import { User, IUserInstance, UserInstanceStatic } from './user/user.model';
+import { TomogramType, ITomogramType, TomogramTypeStatic } from './main/tomogramType.model';
+import { TomogramMaster, ITomogramMaster, TomogramMasterStatic } from './main/tomogramMaster.model';
+import { TomogramDetail, ITomogramDetail, TomogramDetailStatic } from './main/tomogramDetail.model';
 import { DatabaseTables } from '../helpers/constants'
 
-export {ITomogramInstance, IUserInstance}
+export {ITomogramType, IUserInstance, ITomogramDetail, ITomogramMaster}
 
 type UserModelCollection = {
-    'UserModel'?: ModelCtor<Model>    
+    'UserModel': UserInstanceStatic    
 }
 
 type MainModelCollection = {
-    'TomogramTypeModel'?: ModelCtor<Model>    
+    'TomogramTypeModel': TomogramTypeStatic
+    'TomogramDetail': TomogramDetailStatic
+    'TomogramMaster': TomogramMasterStatic
 }
 
 export type IModelCollection = {
@@ -19,10 +23,12 @@ export type IModelCollection = {
 }
 
 export const modelCollection = {
-    [DatabaseTables.DB_USER]: {
+    user: {
         UserModel: User
     },
-    [DatabaseTables.DB_MAIN]: {
-        TomogramTypeModel: TomogramType
+    main: {
+        TomogramTypeModel: TomogramType,
+        TomogramDetail,
+        TomogramMaster
     }
 }
