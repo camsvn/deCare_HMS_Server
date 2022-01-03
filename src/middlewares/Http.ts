@@ -1,4 +1,4 @@
-import { Application, json } from 'express';
+import { Application, json, static as serveStatic} from 'express';
 import helmet from 'helmet';
 
 
@@ -13,6 +13,7 @@ class Http {
             limit: Locals.config().maxUploadLimit
         }))
 
+        _express.use(serveStatic('public'))
         
         /**
          * https://expressjs.com/en/advanced/best-practice-security.html
