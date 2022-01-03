@@ -1,5 +1,6 @@
 import { ErrorRequestHandler, Application, Request, Response } from 'express';
-import { errorResponse } from '../helpers/JSend';
+ import path from 'path';
+ import { errorResponse } from '../helpers/JSend';
 
 import Log from '../middlewares/Log';
 import Locals from '../providers/Locals';
@@ -16,7 +17,8 @@ class Handler {
             if(req.xhr || req.originalUrl.indexOf(`/${apiPrefix}`) === 0) {
                 return res.status(404).json(errorResponse("Path not found"))
             } else {
-                return res.status(404).json(errorResponse("Page not found"))
+                // return res.status(404).json(errorResponse("Page not found"))
+                return res.status(404).sendFile(path.join(Locals.config().appRoot, '/views/404.html'))
             }
         })
 
