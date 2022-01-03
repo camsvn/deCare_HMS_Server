@@ -5,7 +5,7 @@ import {DatabaseTables} from '../helpers/constants'
 class Locals {
     public static config() {
         dotenv.config({ path: path.join(__dirname, '../../.env') });
-
+        const appRoot = path.join(__dirname, '../../')
 		const url = process.env.APP_URL || `http://localhost:${process.env.PORT}`;
 		const port = process.env.PORT || '4040';
 		const appSecret = process.env.APP_SECRET || 'This is your responsibility!';
@@ -35,6 +35,7 @@ class Locals {
         const jwtExpiresIn = process.env.JWT_EXPIRES_IN || 3;
 
         return {
+            appRoot,
             url,
             port,
             appSecret,
