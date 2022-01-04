@@ -1,30 +1,5 @@
 import {DataTypes, Sequelize, Model, BuildOptions} from 'sequelize';
 
-export const TomogramDetail = (sequelize: Sequelize) => (
-    <TomogramDetailStatic>sequelize.define('tomogramDetail', {
-        ID: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            allowNull: false,
-        },
-        MasterID: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        TomogramPartID: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        Narration: {
-            type: DataTypes.STRING(100),
-            allowNull: false
-        }
-    }, {
-        tableName: 'TomogramDetail',
-        timestamps: false
-    })
-);
-
 export interface ITomogramDetail extends Model {
     readonly id: number;
     readonly masterid: number;
@@ -35,5 +10,34 @@ export interface ITomogramDetail extends Model {
 export type TomogramDetailStatic = typeof Model & {
     new (values?: object, options?: BuildOptions): ITomogramDetail;
 }
+
+export const TomogramDetails = (sequelize: Sequelize) => (
+    <TomogramDetailStatic>sequelize.define('tomogramDetail', {
+        id: {
+            type: DataTypes.INTEGER,
+            field: 'ID',
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        masterid: {
+            type: DataTypes.INTEGER,
+            field: 'MasterID',
+            allowNull: false
+        },
+        tomogrampartid: {
+            type: DataTypes.INTEGER,
+            field: 'TomogramPartID',
+            allowNull: false
+        },
+        narration: {
+            type: DataTypes.STRING(100),
+            field: 'Narration',
+            allowNull: false
+        }
+    }, {
+        tableName: 'TomogramDetail',
+        timestamps: false
+    })
+);
 
 

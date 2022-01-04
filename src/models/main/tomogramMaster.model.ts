@@ -3,57 +3,69 @@ import { IModelCollection } from '..';
 
 export interface ITomogramMaster extends Model {
     readonly id: number;
-    readonly opregisterid: number;
-    readonly datetime: string;
+    readonly opid: number;
+    readonly date: string;
     readonly narration: string;
-    readonly doctorid: number;
-    readonly no: number;
-    readonly tomogramtypeid: number;
+    readonly doctorId: number;
+    readonly formNo: number;
+    readonly tomogramTypeId: number;
 }
 
 export type TomogramMasterStatic = typeof Model & {
     new (values?: object, options?: BuildOptions): ITomogramMaster;
 }
 
-export const TomogramMaster = (sequelize: Sequelize, db: IModelCollection) => (
+export const TomogramMasters = (sequelize: Sequelize, db: IModelCollection) => (
     <TomogramMasterStatic>sequelize.define('tomogramMaster', {
-        ID: {
+        id: {
             type: DataTypes.INTEGER,
+            field: 'ID',
             primaryKey: true,
-            allowNull: false,
+            autoIncrement: true
         },
-        OPRegisterID: {
+        opid: {
             type: DataTypes.INTEGER,
+            field: 'OPRegisterID',
             allowNull: false
         },
-        DateTime: {
+        date: {
             type: DataTypes.DATE,
+            field: 'DateTime',
             allowNull: false,
-            defaultValue: DataTypes.NOW
+            // defaultValue: DataTypes.NOW
+            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
         },
-        Narration: {
+        narration: {
             type: DataTypes.STRING(100),
+            field: 'Narration',
+            allowNull: false,
+        },
+        doctorId: {
+            type: DataTypes.INTEGER,
+            field: 'DoctorID',
             allowNull: false
         },
-        DoctorID: {
+        formNo: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            field: 'No'
+            // allowNull: false
         },
-        No: {
+        tomogramTypeId: {
             type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        TomogramTypeID: {
-            type: DataTypes.INTEGER,
+            field: 'TomogramTypeID',
             allowNull: false
         }
     }, {
         tableName: 'TomogramMaster',
         timestamps: false,
         hooks: {
-            beforeCreate: async (instance: Model<ITomogramMaster>) => {
+            beforeCreate: async (instance: ITomogramMaster, options) => {
                 //check latest entry
-                const tomMaster: number = await db.main.TomogramMaster?.max('no')
+                const tomMaster: number = await db.main.TomogramMasters?.max('formNo');
+                // instance.no = tomMaster
+                instance.setDataValue('formNo', tomMaster + 1);
+                // let date = Sequelize.fn('CURRENT_TIMESTAMP');
+                // instance.setDataValue('DateTime', date);
             }
         }
     })
