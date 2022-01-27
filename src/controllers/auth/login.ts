@@ -32,7 +32,7 @@ export const loginController = async (req: Request, res: Response) => {
                 accessToken: token 
             }));
         } 
-        res.status(400).json(failResponse("Invalid Credentials"));
+        res.status(404).json(failResponse("Invalid Credentials"));
         
     } catch (e: any) {
         Log.error(e.message);
