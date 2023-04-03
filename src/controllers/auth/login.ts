@@ -20,16 +20,23 @@ export const loginController = async (req: Request, res: Response) => {
         });
 
         if (user && user.password === password) {            
-            const token = jwt.sign(
-                {user_id: user.id, username},
+            const accessToken = jwt.sign(
+                {user_id: user.id, username, token_type: "access"},
                 Locals.config().appSecret,
                 {expiresIn: '2h'}
+            );
+
+            const refreshToken = jwt.sign(
+                {user_id: user.id, username, token_type: "refresh"},
+                Locals.config().appSecret + '_refresh',
+                {expiresIn: '5 days'}
             );
 
             return res.status(200).json(successResponse({
                 id: user.id,
                 username: user.username,
-                accessToken: token 
+                accessToken,
+                refreshToken
             }));
         } 
         res.status(404).json(failResponse("Invalid Credentials"));
@@ -43,4 +50,23 @@ export const loginController = async (req: Request, res: Response) => {
 
 export const getloginController = async (req: Request, res: Response) => {
     res.json(successResponse('Route /auth/login success'));
+}
+
+export const getHealthCheckController = async (req: Request, res: Response) => {
+    // Check if the request is coming from a valid IP address
+    const validIps = ['127.0.0.1', '::1'];
+    if (!validIps.includes(req.ip)) {
+        return res.status(403).json(failResponse("Forbidden"));
+    }
+
+    // Check if the request includes a valid API key
+    const apiKey = req.query.api_key;
+    if (!apiKey || apiKey !== 'abc123') {
+        return res.status(401).json(failResponse("Unauthorized"));
+    }
+
+    res.status(200).json(successResponse({
+        message: 'API is running!',
+        uptime: Math.floor(process.uptime())
+    }));
 }
