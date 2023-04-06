@@ -1,14 +1,22 @@
 import { Request, Response, NextFunction } from "express";
 import multer from 'multer';
 import {FileTypeException} from '../helpers/errors';
+import fs from 'fs'
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
+    const dir = './uploads/';
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
       cb(null, './uploads/')
   },
   
   filename: function (req: any, file: any, cb: any) {
-      cb(null, file.originalname)
+    const originalname = file.originalname;
+    const extension = originalname.split('.').pop();
+    const filename = originalname.replace("." + extension, "").replace(/[.\s]/g, '_') + '.' + extension;
+      cb(null, filename)
   }
 });
 
@@ -21,7 +29,7 @@ const fileFilter = (req: any,file: any,cb: any) => {
   }
 }
 
-const upload = multer({storage: storage, fileFilter : fileFilter}).array('images', 4);
+const upload = multer({storage: storage, fileFilter : fileFilter}).array('images');
 // var upload = multer({ dest: 'uploads/' }); //setting the default folder for multer
 export function uploadFile(req: Request, res: Response, next: NextFunction) {
   upload(req, res, function (err) {
