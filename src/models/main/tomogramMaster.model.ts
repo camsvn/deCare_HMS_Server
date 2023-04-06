@@ -61,9 +61,9 @@ export const TomogramMasters = (sequelize: Sequelize, db: IModelCollection) => (
         hooks: {
             beforeCreate: async (instance: ITomogramMaster, options) => {
                 //check latest entry
-                const tomMaster: number = await db.main.TomogramMasters?.max('formNo');
+                let maxFormNoValue: number = await db.main.TomogramMasters?.max('formNo') || 0;
                 // instance.no = tomMaster
-                instance.setDataValue('formNo', tomMaster + 1);
+                instance.setDataValue('formNo', maxFormNoValue + 1);
                 // let date = Sequelize.fn('CURRENT_TIMESTAMP');
                 // instance.setDataValue('DateTime', date);
             }
