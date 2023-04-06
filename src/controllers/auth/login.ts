@@ -54,16 +54,17 @@ export const getloginController = async (req: Request, res: Response) => {
 
 export const getHealthCheckController = async (req: Request, res: Response) => {
     // Check if the request is coming from a valid IP address
-    const validIps = ['127.0.0.1', '::1'];
-    if (!validIps.includes(req.ip)) {
-        return res.status(403).json(failResponse("Forbidden"));
-    }
+    // const validIps = ['127.0.0.1', '::1'];
+    // console.log(req.ip)
+    // if (!validIps.includes(req.ip)) {
+    //     return res.status(403).json(failResponse("Forbidden"));
+    // }
 
-    // Check if the request includes a valid API key
-    const apiKey = req.query.api_key;
-    if (!apiKey || apiKey !== 'abc123') {
-        return res.status(401).json(failResponse("Unauthorized"));
-    }
+    // // Check if the request includes a valid API key
+    // const apiKey = req.query.api_key;
+    // if (!apiKey || apiKey !== 'abc123') {
+    //     return res.status(401).json(failResponse("Unauthorized"));
+    // }
 
     res.status(200).json(successResponse({
         message: 'API is running!',
