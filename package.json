@@ -10,7 +10,7 @@
     "dev:server": "SET `NODE_ENV`=development & nodemon dist",
     "compile:watch": "tsc --project ./tsconfig.json --watch",
     "dev": "concurrently \"npm:dev:server\" \"npm:compile:watch\"",
-    "zip:pwsh": "pwsh.exe -Command \"Compress-Archive -Path .\\release, .\\package.json, .\\package-lock.json, .\\.env.template, .\\views, .\\public -DestinationPath .\\bundle.zip\"",
+    "zip:pwsh": "pwsh.exe -Command \"Compress-Archive -Path .\\release, .\\package.json, .\\package-lock.json, .\\.env.template, .\\views, .\\public -DestinationPath .\\bundle.zip -Force\"",
     "bundle:release": "npm run build:release && npm run zip:pwsh"
   },
   "author": "Amal Salvin Joseph",
