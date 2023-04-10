@@ -1,15 +1,30 @@
 import { Request, Response, NextFunction } from "express";
 import multer from 'multer';
 import {FileTypeException} from '../helpers/errors';
-import fs from 'fs'
+import fs, { PathLike } from 'fs'
+import { mainDB } from "../providers/Database";
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const dir = './uploads/';
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
+  destination: async function (req, file, cb) {
+    const uploadPath = await mainDB.Settings.findOne({ where: { key: "TomogramPath" } })
+    
+    let dir: PathLike
+
+    if (uploadPath) {
+      dir = uploadPath.value
+
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+      cb(null, dir)
+    } else {
+      cb(new Error("Upload path not found"), './uploads/')
     }
-      cb(null, './uploads/')
+    // const dir = './uploads/';
+    // if (!fs.existsSync(dir)) {
+    //   fs.mkdirSync(dir);
+    // }
+    //   cb(null, './uploads/')
   },
   
   filename: function (req: any, file: any, cb: any) {
