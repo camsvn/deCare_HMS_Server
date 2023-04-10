@@ -4,7 +4,9 @@ import * as dotenv from 'dotenv';
 import {DatabaseTables} from '../helpers/constants'
 class Locals {
     public static config() {
-        dotenv.config({ path: path.join(__dirname, '../../.env') });
+        const rootDir = process.cwd();
+        dotenv.config({ path: path.join(rootDir, '.env') });
+        // dotenv.config({ path: path.join(__dirname, '../../.env') });
         const appRoot = path.join(__dirname, '../../')
 		const url = process.env.APP_URL || `http://localhost:${process.env.PORT}`;
 		const port = process.env.PORT || '4040';
