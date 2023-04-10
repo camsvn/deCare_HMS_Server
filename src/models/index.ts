@@ -4,6 +4,7 @@ import { TomogramType, ITomogramType, TomogramTypeStatic } from './main/tomogram
 import { TomogramMasters, ITomogramMaster, TomogramMasterStatic } from './main/tomogramMaster.model';
 import { TomogramDetails, ITomogramDetail, TomogramDetailStatic } from './main/tomogramDetail.model';
 import { OpRegisters, IOpRegister, OpRegisterStatic } from './main/opRegister.model';
+import { Settings, ISettings, SettingsStatic } from './main/settings.model';
 import { DatabaseTables } from '../helpers/constants'
 
 export {ITomogramType, IUserInstance, ITomogramDetail, ITomogramMaster}
@@ -17,6 +18,7 @@ type MainModelCollection = {
     'TomogramDetails': TomogramDetailStatic
     'TomogramMasters': TomogramMasterStatic
     'OpRegisters': OpRegisterStatic
+    'Settings': SettingsStatic
 }
 
 export type IModelCollection = {
@@ -32,6 +34,7 @@ export const modelCollection = {
         TomogramTypeModel: TomogramType,
         TomogramDetails,
         TomogramMasters,
-        OpRegisters
+        OpRegisters,
+        Settings
     }
 }
