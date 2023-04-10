@@ -1,6 +1,7 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const Dotenv = require('dotenv-webpack');
+// const Dotenv = require('dotenv-webpack');
+// const { DefinePlugin } = require('webpack');
 
 // config for ts2bundle
 module.exports = (env, argv) => {
@@ -26,10 +27,7 @@ module.exports = (env, argv) => {
       ]
     },
     target: 'node',
-    externals: [nodeExternals()],
-    plugins: [
-      new Dotenv()
-    ]
+    externals: [nodeExternals()]
   }
 };
 
