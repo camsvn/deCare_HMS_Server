@@ -5,5 +5,7 @@ yarn-error.log
 .nyc_output
 coverage
 dist/
+release/
+bundle.zip
 .logs
 uploads/
