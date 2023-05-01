@@ -3,6 +3,7 @@ import multer from 'multer';
 import {FileTypeException} from '../helpers/errors';
 import fs, { PathLike } from 'fs'
 import { mainDB } from "../providers/Database";
+import Log from "./Log";
 
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {
@@ -49,8 +50,10 @@ const upload = multer({storage: storage, fileFilter : fileFilter}).array('images
 export function uploadFile(req: Request, res: Response, next: NextFunction) {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError || err instanceof FileTypeException) {
+        Log.error(`Multer :: ${err.message}`);
         return res.status(500).json({code: err.code, name: err.name, message: err.message})
     } else if (err) {
+      Log.error(`Multer :: ${err.message}`);
       return res.status(500).json({name: err.name, message: err.message})
     }
     next()

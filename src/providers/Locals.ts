@@ -37,6 +37,7 @@ class Locals {
         const jwtExpiresIn = process.env.JWT_EXPIRES_IN || 3;
 
         return {
+            rootDir,
             appRoot,
             url,
             port,

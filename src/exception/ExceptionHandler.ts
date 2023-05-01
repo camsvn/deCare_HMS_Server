@@ -19,7 +19,7 @@ class Handler {
             } else {
                 let requestType = req.accepts(['html', 'json'])
                 if(requestType === 'html')
-                    return res.status(404).sendFile(path.join(Locals.config().appRoot, '/views/404.html'))                
+                    return res.status(404).sendFile(path.join(Locals.config().rootDir, '/views/404.html'))                
                 return res.status(404).json(errorResponse("Page not found"))
             }
         })
