@@ -1,5 +1,6 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const TerserPlugin = require("terser-webpack-plugin");
 // const Dotenv = require('dotenv-webpack');
 // const { DefinePlugin } = require('webpack');
 
@@ -27,7 +28,16 @@ module.exports = (env, argv) => {
       ]
     },
     target: 'node',
-    externals: [nodeExternals()]
+    externals: [nodeExternals()],
+    optimization: {
+      minimize: true,
+      minimizer: [new TerserPlugin({
+        minify: TerserPlugin.uglifyJsMinify,
+        terserOptions: {
+          mangle: true,
+        },
+      })],
+    }
   }
 };
 
