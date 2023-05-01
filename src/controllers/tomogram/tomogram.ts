@@ -46,6 +46,7 @@ export const uploadTomogramController = async (req: Request, res: Response) => {
         { transaction: t }
       )
         .then((result) => {
+          Log.info("Tomogram Detail Creation :: Started");
           let promises = [];
           for (let i = 0; i < files.length; i++) {
             let narration = descriptions[i] ? descriptions[i] : "";
@@ -58,16 +59,21 @@ export const uploadTomogramController = async (req: Request, res: Response) => {
           return Promise.all(promises);
         })
         .then((data) => {
+          Log.info("Tomogram File Rename :: Started");
           files.forEach((file, index) => {
+            Log.info(`Tomogram File OldRename :: ${file.filename}`);
             let savedData = data[index];
             // let newFileName = `TOMOGRAM${savedData.masterid}_${savedData.id}.jpg`;
             let newFileName = `${savedData.masterid}_${savedData.id}.JPEG`;
             fs.renameSync(file.path, file.destination + newFileName);
+            Log.info(`Tomogram File NewRename :: ${newFileName}`);
           });
+          Log.info("Tomogram File Rename :: Completed");
           t.commit();
           res.status(200).send(successResponse(data));
         })
         .catch((err) => {
+          Log.info(`Tomogram Error:: ${err.message}}`);
           t.rollback();
           console.log(err.message);
           res.status(500).send(errorResponse(err.message));
