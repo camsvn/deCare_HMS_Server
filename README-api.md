@@ -57,3 +57,26 @@ curl -s -w '\nHTTP %{http_code}\n' -H "Authorization: Bearer $ACCESS" \
 # 7. Tomogram upload without a token -> 401
 curl -s -w '\nHTTP %{http_code}\n' -F opid=580 http://localhost:4041/api/tomogram
 ```
+
+## Settings-driven tomogram identifiers
+
+`POST /api/tomogram` no longer hard-codes the doctor/type/part IDs used when
+creating a `TomogramMaster`/`TomogramDetail` row. It reads them from the
+`Settings` table (via `src/helpers/settings.ts`, `getSetting`/`getSettingInt`),
+falling back to the previous literals if a row is missing or empty:
+
+| Settings key         | Fallback | Used for                        |
+|-----------------------|----------|----------------------------------|
+| `PrimaryDoctorID`     | `1`      | `TomogramMaster.DoctorID`        |
+| `TomogramTypeID`      | `6`      | `TomogramMaster.TomogramTypeID`  |
+| `TomogramPartID`      | `2`      | `TomogramDetail.TomogramPartID`  |
+
+`Settings` rows are `{Key, Value}` pairs (the `TomogramPath` upload directory
+already came from this table via `multer.ts`; the model's attribute for the
+lookup column was renamed from `opid` to `key` to match).
+
+For a fresh local DB that is missing the `TomogramType`/`TomogramPart` lookup
+rows referenced by the fallbacks (`TomogramType.ID = 6`, `TomogramPart.ID = 2`)
+and/or the corresponding `Settings` rows, run `sql/seed-local-tomogram.sql`
+once against `HospitalMain` (not run automatically, and not part of this
+task's changes — it only inserts rows that don't already exist).

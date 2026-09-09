@@ -3,7 +3,7 @@ import { IModelCollection } from '..';
 
 export interface ISettings extends Model {
     readonly id: number;
-    readonly key: number;
+    readonly key: string;
     readonly value: string;
 }
 
@@ -19,7 +19,7 @@ export const Settings = (sequelize: Sequelize, db: IModelCollection) => (
             primaryKey: true,
             autoIncrement: true
         },
-        opid: {
+        key: {
             type: DataTypes.STRING(50),
             field: 'Key',
             allowNull: false

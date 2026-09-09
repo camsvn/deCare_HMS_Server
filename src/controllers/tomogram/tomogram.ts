@@ -11,6 +11,7 @@ import {
 
 import fs from "fs";
 import { userDB, mainDB, connections } from "../../providers/Database";
+import { getSettingInt } from "../../helpers/settings";
 
 export const uploadTomogramController = async (req: Request, res: Response) => {
   const { opid, narrations } = req.body;
@@ -35,6 +36,12 @@ export const uploadTomogramController = async (req: Request, res: Response) => {
     descriptions = [];
   }
 
+  const [doctorId, tomogramTypeId, tomogramPartId] = await Promise.all([
+    getSettingInt('PrimaryDoctorID', 1),
+    getSettingInt('TomogramTypeID', 6),
+    getSettingInt('TomogramPartID', 2),
+  ]);
+
   connections
     .get("main")
     ?.transaction()
@@ -42,7 +49,7 @@ export const uploadTomogramController = async (req: Request, res: Response) => {
       const op = await mainDB.OpRegisters.findOne({ where: { opid } });
       if (!op) return res.send(failResponse("Invalid OP Number"));
       mainDB.TomogramMasters.create(
-        { opid: op?.id, doctorId: 1, tomogramTypeId: 6, narration: "" },
+        { opid: op?.id, doctorId, tomogramTypeId, narration: "" },
         { transaction: t }
       )
         .then((result) => {
@@ -51,7 +58,7 @@ export const uploadTomogramController = async (req: Request, res: Response) => {
           for (let i = 0; i < files.length; i++) {
             let narration = descriptions[i] ? descriptions[i] : "";
             let newPromise = mainDB.TomogramDetails.create(
-              { masterid: result.id, tomogrampartid: 2, narration },
+              { masterid: result.id, tomogrampartid: tomogramPartId, narration },
               { transaction: t }
             );
             promises.push(newPromise);
