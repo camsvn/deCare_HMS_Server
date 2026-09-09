@@ -13,6 +13,62 @@ import fs from "fs";
 import { userDB, mainDB, connections } from "../../providers/Database";
 import { getSettingInt } from "../../helpers/settings";
 
+interface MasterRow {
+  id: number;
+  date: Date | string;
+  doctorId: number;
+  tomogramTypeId: number;
+}
+
+interface DetailRow {
+  id: number;
+  masterid: number;
+  tomogrampartid: number;
+  narration: string | null;
+}
+
+export const listTomogramsController = async (req: Request, res: Response) => {
+  const opid = Number(req.query.opid);
+  if (!opid) return res.status(400).json(failResponse("Invalid opid"));
+  try {
+    const op = await mainDB.OpRegisters.findOne({ where: { opid } });
+    if (!op) return res.status(404).json(failResponse("Invalid OP Number"));
+
+    const masters = (await mainDB.TomogramMasters.findAll({
+      where: { opid: (op as unknown as { id: number }).id },
+      order: [['date', 'DESC'], ['id', 'DESC']],
+    })) as unknown as MasterRow[];
+
+    const masterIds = masters.map((m) => m.id);
+    const details = (masterIds.length === 0
+      ? []
+      : await mainDB.TomogramDetails.findAll({
+          where: { masterid: masterIds },
+          order: [['id', 'ASC']],
+        })) as unknown as DetailRow[];
+
+    const byMaster = new Map<number, { id: number; tomogramPartId: number; narration: string }[]>();
+    for (const d of details) {
+      const list = byMaster.get(d.masterid) ?? [];
+      list.push({ id: d.id, tomogramPartId: d.tomogrampartid, narration: d.narration ?? '' });
+      byMaster.set(d.masterid, list);
+    }
+
+    const data = masters.map((m) => ({
+      id: m.id,
+      dateTime: new Date(m.date).toISOString(),
+      doctorId: m.doctorId,
+      tomogramTypeId: m.tomogramTypeId,
+      details: byMaster.get(m.id) ?? [],
+    }));
+
+    return res.status(200).json(successResponse(data));
+  } catch (e: any) {
+    Log.error(e.message);
+    return res.status(500).json(errorResponse("Internal Server Error", e.message));
+  }
+};
+
 export const uploadTomogramController = async (req: Request, res: Response) => {
   const { opid, narrations } = req.body;
   let descriptions = narrations;

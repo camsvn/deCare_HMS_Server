@@ -11,7 +11,7 @@ JSend envelopes throughout: `{"status":"success","data":...}`, `{"status":"fail"
 | GET    | `/api/auth/healthcheck`  | open   | Liveness check                                      |
 | GET    | `/api/opregister?opid=`  | Bearer | Looks up an OP register entry by `opid`             |
 | POST   | `/api/tomogram`          | Bearer | Multipart upload (auth enforced before file parsing)|
-| GET    | `/api/tomogram?opid=`    | Bearer | (unchanged by this task; listed per target API)     |
+| GET    | `/api/tomogram?opid=`    | Bearer | Lists uploaded tomogram sets for an OP number        |
 
 Access tokens (`token_type: "access"`) expire in 2 hours; refresh tokens (`token_type: "refresh"`)
 expire in 5 days and are signed with a different secret. Protected routes read
@@ -56,7 +56,38 @@ curl -s -w '\nHTTP %{http_code}\n' -H "Authorization: Bearer $ACCESS" \
 
 # 7. Tomogram upload without a token -> 401
 curl -s -w '\nHTTP %{http_code}\n' -F opid=580 http://localhost:4041/api/tomogram
+
+# 8. Tomogram history for an OP number -> 200 with an array of sets
+curl -s -w '\nHTTP %{http_code}\n' -H "Authorization: Bearer $ACCESS" \
+  "http://localhost:4041/api/tomogram?opid=580"
+
+# 9. Tomogram history for a non-existent OP number -> 404
+curl -s -w '\nHTTP %{http_code}\n' -H "Authorization: Bearer $ACCESS" \
+  "http://localhost:4041/api/tomogram?opid=999999"
 ```
+
+## GET /api/tomogram?opid= response shape
+
+`data` is an array, ordered newest first (by `date` desc, then `id` desc), of:
+
+```json
+{
+  "id": 9,
+  "dateTime": "2026-09-09T14:17:17.910Z",
+  "doctorId": 1,
+  "tomogramTypeId": 6,
+  "details": [
+    { "id": 9, "tomogramPartId": 2, "narration": "curl test task2" }
+  ]
+}
+```
+
+- `id` is the `TomogramMaster` row id; `dateTime` is `TomogramMaster.DateTime`
+  serialised as an ISO 8601 string.
+- `details` lists that master's `TomogramDetail` rows (ordered by `id` asc);
+  `narration` is `""` when the stored value is null.
+- `opid` not found → `404 {"status":"fail","data":"Invalid OP Number"}`.
+- Missing/non-numeric `opid` → `400 {"status":"fail","data":"Invalid opid"}`.
 
 ## Settings-driven tomogram identifiers
 
