@@ -8,4 +8,5 @@ export interface IRequest {
 export interface IUserJWT extends JwtPayload {
     username: string;
     user_id: number;
+    token_type?: 'access' | 'refresh';
 }

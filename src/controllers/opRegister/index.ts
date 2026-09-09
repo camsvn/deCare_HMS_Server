@@ -4,7 +4,6 @@ import authentication from '../../middlewares/auth';
 
 const router = Router();
 
-// router.get('/', authentication, getOPRegisterController);
-router.get('/', getOPRegisterController);
+router.get('/', authentication, getOPRegisterController);
 
 export default router;
