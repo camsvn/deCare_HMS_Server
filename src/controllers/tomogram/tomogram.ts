@@ -92,11 +92,22 @@ export const uploadTomogramController = async (req: Request, res: Response) => {
     descriptions = [];
   }
 
-  const [doctorId, tomogramTypeId, tomogramPartId] = await Promise.all([
-    getSettingInt('PrimaryDoctorID', 1),
-    getSettingInt('TomogramTypeID', 6),
-    getSettingInt('TomogramPartID', 2),
-  ]);
+  // Outside a try/catch this rejection escapes the async handler: Express 4
+  // does not forward it to the error middleware, so the request would hang
+  // until the client timed out. Answer 500 the way the list controller does.
+  let doctorId: number;
+  let tomogramTypeId: number;
+  let tomogramPartId: number;
+  try {
+    [doctorId, tomogramTypeId, tomogramPartId] = await Promise.all([
+      getSettingInt('PrimaryDoctorID', 1),
+      getSettingInt('TomogramTypeID', 6),
+      getSettingInt('TomogramPartID', 2),
+    ]);
+  } catch (e: any) {
+    Log.error(`Tomogram Settings Read Failed :: ${e.message}`);
+    return res.status(500).json(errorResponse("Internal Server Error", e.message));
+  }
 
   connections
     .get("main")
