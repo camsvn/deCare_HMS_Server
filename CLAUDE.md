@@ -1,6 +1,6 @@
 # HMSServer — working notes for Claude
 
-Express + TypeScript 4.3 + Sequelize 5 (SQL Server via tedious) API for the DeCare HMS mobile
+Express 4 + TypeScript 5.9 + Sequelize 6 (SQL Server via tedious 20) API for the DeCare HMS mobile
 app (`../HMSFlutter`). Node 24 locally.
 
 ## Commands

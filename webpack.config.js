@@ -32,7 +32,6 @@ module.exports = (env, argv) => {
     optimization: {
       minimize: true,
       minimizer: [new TerserPlugin({
-        minify: TerserPlugin.uglifyJsMinify,
         terserOptions: {
           mangle: true,
         },
