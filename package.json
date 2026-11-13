@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "DeCare HMS Photo Upload Server",
   "main": "index.js",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "build": "tsc --project ./tsconfig.json",
     "build:release": "webpack --mode production",
