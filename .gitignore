@@ -6,6 +6,6 @@ yarn-error.log
 coverage
 dist/
 release/
-bundle.zip
+bundle*.zip
 .logs
 uploads/
