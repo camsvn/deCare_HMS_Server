@@ -5,6 +5,7 @@ import Locals from '../../providers/Locals'
 import Log from '../../middlewares/Log';
 import {errorResponse,failResponse,successResponse} from '../../helpers/JSend'
 import {IUserJWT} from '../../interfaces/vendors/IRequest'
+import {appVersion} from '../../helpers/version'
 
 import {userDB} from '../../providers/Database'
 
@@ -79,6 +80,7 @@ export const getHealthCheckController = async (req: Request, res: Response) => {
 
     res.status(200).json(successResponse({
         message: 'API is running!',
+        version: appVersion,
         uptime: Math.floor(process.uptime())
     }));
 }

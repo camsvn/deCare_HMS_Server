@@ -8,7 +8,7 @@ JSend envelopes throughout: `{"status":"success","data":...}`, `{"status":"fail"
 |--------|--------------------------|--------|-----------------------------------------------------|
 | POST   | `/api/auth/login`        | open   | `{username, password}` → `{id, username, accessToken, refreshToken}` |
 | POST   | `/api/auth/refresh`      | open   | `{refreshToken}` → `{accessToken}`                  |
-| GET    | `/api/auth/healthcheck`  | open   | Liveness check                                      |
+| GET    | `/api/auth/healthcheck`  | open   | Liveness check; returns `version` and `uptime`      |
 | GET    | `/api/opregister?opid=`  | Bearer | Looks up an OP register entry by `opid`             |
 | POST   | `/api/tomogram`          | Bearer | Multipart upload (auth enforced before file parsing)|
 | GET    | `/api/tomogram?opid=`    | Bearer | Lists uploaded tomogram sets for an OP number        |

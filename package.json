@@ -1,6 +1,6 @@
 {
   "name": "decare_hms",
-  "version": "1.0.0",
+  "version": "2026.11.1",
   "description": "DeCare HMS Photo Upload Server",
   "main": "index.js",
   "engines": {
@@ -13,7 +13,7 @@
     "dev:server": "SET `NODE_ENV`=development & nodemon dist",
     "compile:watch": "tsc --project ./tsconfig.json --watch",
     "dev": "concurrently \"npm:dev:server\" \"npm:compile:watch\"",
-    "zip:pwsh": "pwsh.exe -Command \"Compress-Archive -Path .\\release, .\\package.json, .\\package-lock.json, .\\.env.template, .\\views, .\\public -DestinationPath .\\bundle.zip -Force\"",
+    "zip:pwsh": "pwsh.exe -NoProfile -File scripts/bundle.ps1",
     "bundle:release": "npm run build:release && npm run zip:pwsh"
   },
   "author": "Amal Salvin Joseph",

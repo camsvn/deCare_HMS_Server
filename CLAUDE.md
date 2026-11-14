@@ -8,7 +8,11 @@ app (`../HMSFlutter`). Node 24 locally.
 ```bash
 npm run dev     # tsc watch + nodemon on port 4041 (the developer's process — do not kill it)
 npm run build   # tsc; must be clean before every commit
+npm run bundle:release  # webpack + zip → bundle-<version>.zip for deployment
 ```
+
+Deployment (NSSM service, nvm, one folder per version, calendar versions in `package.json`) is
+in `DEPLOY.md`.
 
 There is no test runner. `README-api.md` holds the curl sequence that acts as the regression
 suite; run it against the dev server after changes.
