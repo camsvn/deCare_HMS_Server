@@ -2,25 +2,76 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DeCare HMS server: patient photo uploads for DeCare Hospital ERP.">
+  <meta name="color-scheme" content="light dark">
   <title>DeCare HMS</title>
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
   <link rel="manifest" href="/favicon_io/site.webmanifest">
   <link rel="stylesheet" href="/home.css">
+  <script src="/home.js" defer></script>
 </head>
 <body>
-  <div id="main">
-    <div id="hello">
-    <h1 id="one">H</h1>
-    <h1 id="two">E</h1>
-    <h1 id="three">L</h1>
-    <h1 id="four">L</h1>
-    <h1 id="five">O</h1>
+  <header class="hero">
+    <div class="wrap hero__inner">
+      <img class="hero__mark" src="/img/hms-mark.png" alt="" width="72" height="72">
+      <div>
+        <h1 class="hero__title">DeCare HMS</h1>
+        <p class="hero__lede">Patient photo uploads for DeCare Hospital ERP</p>
+      </div>
     </div>
-    <h2 id="con">WE ARE UNDER CONSTRUCTION</h2>
-  </div>  
+  </header>
+
+  <main class="wrap">
+    <section class="card" aria-labelledby="status-title">
+      <h2 id="status-title" class="sr-only">Server status</h2>
+      <p class="status" data-state="checking" id="status" role="status">
+        <span class="status__dot" aria-hidden="true"></span>
+        <span id="status-text">Checking the server…</span>
+      </p>
+      <p class="meta" id="status-meta">This page is served by the DeCare HMS server.</p>
+
+      <div class="address">
+        <p class="label">Server address for the mobile app</p>
+        <p class="address__value" id="address">http://&lt;this-computer's-IP&gt;:&lt;port&gt;</p>
+        <p class="hint" id="address-hint">
+          Enter this address on the app's server setup screen. Phones must be on the same
+          network as this server.
+        </p>
+      </div>
+    </section>
+
+    <section class="card contact" aria-labelledby="contact-title">
+      <div class="contact__logo">
+        <img src="/img/decare-logo.jpg" alt="DeCare Software Solutions" width="640" height="256">
+      </div>
+      <div class="contact__body">
+        <h2 id="contact-title">Contact us</h2>
+        <p class="meta">
+          For help with the app, this server or DeCare Hospital ERP, get in touch with
+          DeCare Software Solutions.
+        </p>
+        <ul class="contact__list">
+          <li>
+            <span class="label">Phone</span>
+            <a href="tel:+918086358930">+91 80863 58930</a>
+          </li>
+          <li>
+            <span class="label">Website</span>
+            <a href="https://www.decare.team" target="_blank" rel="noopener">decare.team</a>
+          </li>
+        </ul>
+        <p class="hint">
+          Support for DeCare HMS is included with an active DeCare Hospital ERP support licence.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <p>&copy; <span id="year">2026</span> DeCare Software Solutions. All rights reserved.</p>
+  </footer>
 </body>
 </html>
